@@ -1,0 +1,73 @@
+#include <iostream>
+#include <vector>
+#include <iomanip> // For setting decimal precision
+
+using namespace std;
+
+// Define a struct to hold course information
+struct Course {
+    int creditHours;
+    float gradePoint;
+};
+
+// Function to calculate CGPA
+float calculateCGPA(const vector<Course>& courses) {
+    float totalPoints = 0.0;
+    int totalCredits = 0;
+
+    for (const auto& course : courses) {
+        totalPoints += course.creditHours * course.gradePoint;
+        totalCredits += course.creditHours;
+    }
+
+    if (totalCredits == 0) {
+        return 0.0; // Avoid division by zero
+    }
+    return totalPoints / totalCredits;
+}
+
+int main() {
+    int numCourses;
+
+    cout << "Enter the number of courses taken: ";
+    cin >> numCourses;
+
+    vector<Course> courses(numCourses);
+
+    // Input credit hours and grade points for each course
+    for (int i = 0; i < numCourses; ++i) {
+        cout << "Enter the credit hours for course " << (i + 1) << ": ";
+        cin >> courses[i].creditHours;
+
+        cout << "Enter the grade point for course " << (i + 1) << ": ";
+        cin >> courses[i].gradePoint;
+    }
+
+    float cgpa = calculateCGPA(courses);
+
+    // Display course details
+    cout << "\nCourse Details:\n";
+    cout << "Course No.\tCredit Hours\tGrade Point\tOverall Grade\n";
+    for (int i = 0; i < numCourses; ++i) {
+        float overallGrade = courses[i].creditHours * courses[i].gradePoint;
+        cout << (i + 1) << "\t\t" 
+             << courses[i].creditHours << "\t\t" 
+             << fixed << setprecision(2) << courses[i].gradePoint << "\t\t" 
+             << fixed << setprecision(2) << overallGrade << endl;
+    }
+
+    int totalCredits = 0;
+    float totalPoints = 0.0;
+
+    // Calculate total credits and total points
+    for (const auto& course : courses) {
+        totalCredits += course.creditHours;
+        totalPoints += course.creditHours * course.gradePoint;
+    }
+
+    cout << "\nTotal Credits: " << totalCredits << endl;
+    cout << "Total Grade Points: " << fixed << setprecision(2) << totalPoints << endl;
+    cout << "CGPA for the semester: " << fixed << setprecision(2) << cgpa << endl;
+
+    return 0;
+}
